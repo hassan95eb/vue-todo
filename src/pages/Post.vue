@@ -1,50 +1,53 @@
 <template>
-  <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-semibold">Posts</h1>
+  <div class="container mx-auto mt-4">
+    <!--Loading-->
     <div v-if="isLoading">
       <LoadingComponent />
     </div>
+    <!--Loading-->
+
+    <!--Error-->
     <div v-else-if="error">
       <div class="flex flex-col items-center justify-center">
         <h1 class="text-2xl font-bold text-red-500">Error</h1>
-        <p class="text-gray-600">Failed to load posts data.</p>
+        <p class="text-gray-600">Failed to load user data.</p>
         <p class="text-gray-600">{{ error.message }}</p>
       </div>
     </div>
+    <!--Error-->
 
-    <div v-else class="flex flex-col md:flex-row justify-center flex-wrap">
-      <div
-        v-for="post in posts"
-        :key="post.id"
-        class="md:w-1/2 lg:w-1/3 xl:w-1/3 p-2 h-auto"
-      >
-        <PostCard :post="post" />
-      </div>
+    <!--content-->
+    <div v-else class="flex flex-col">
+      <h1 class="font-bold text-2xl">{{ post.title }}</h1>
+      <hr />
+
+      <p class="text-gray-600 my-3">{{ post.body }}</p>
     </div>
+    <!--content-->
   </div>
 </template>
-
 <script setup>
-import PostCard from "@/components/PostCard.vue";
 import LoadingComponent from "@/components/utilities/LoadingComponent.vue";
 import axios from "axios";
 import { onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
 
-const posts = ref([]);
+const route = useRoute();
+const postId = route.params.id;
+const post = ref({});
 const isLoading = ref(true);
 const error = ref(null);
+
 onMounted(() => {
   axios
-    .get("https://jsonplaceholder.typicode.com/posts")
+    .get(`https://jsonplaceholder.typicode.com/posts/${postId}`)
     .then((res) => {
-      posts.value = res.data;
+      post.value = res.data;
       isLoading.value = false;
     })
-    .catch((error) => {
-      error.value = error;
+    .catch((err) => {
       isLoading.value = false;
+      error.value = err;
     });
 });
 </script>
-
-<style></style>

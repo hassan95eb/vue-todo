@@ -3,10 +3,13 @@ import Home from "./pages/Home.vue";
 import Users from "./pages/Users.vue";
 import Posts from "./pages/Posts.vue";
 import User from "./pages/User.vue";
+import Post from "./pages/Post.vue";
+
 const routes = [
   { path: "/", name: "Home", component: Home },
   { path: "/users", name: "Users", component: Users },
   { path: "/posts", name: "Posts", component: Posts },
+  { path: "/posts/:id", name: "Post", component: Post },
   { path: "/users/:id", name: "User", component: User },
 ];
 const router = createRouter({
