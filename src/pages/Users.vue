@@ -1,12 +1,10 @@
 <template>
   <div class="container mx-auto">
+    <!--Loading-->
     <div v-if="isLoading">
-      <img
-        src="../assets/loading-4802_512.gif"
-        alt="Loading..."
-        class="mx-auto w-100"
-      />
+      <LoadingComponent />
     </div>
+    <!--Loading-->
     <div
       v-else-if="users.length"
       class="flex flex-col justify-center md:flex-row flex-wrap"
@@ -24,6 +22,7 @@
 
 <script setup>
 import UserCard from "@/components/UserCard.vue";
+import LoadingComponent from "@/components/utilities/LoadingComponent.vue";
 import axios from "axios";
 import { onMounted, ref } from "vue";
 
@@ -35,8 +34,6 @@ onMounted(() => {
     if (response.status === 200) {
       users.value = response.data;
       isLoading.value = false;
-      console.log("Users:", users.value);
-      console.log("Response:", response);
     } else {
       console.error("Error fetching users:", response.status);
     }
